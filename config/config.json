@@ -1,0 +1,10 @@
+{
+    "supportVideoName": [
+        ".mp4",
+        ".avi",
+    ],
+    "supportPicName": [
+        ".jpg",
+        ".png",
+    ]
+}
