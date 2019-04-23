@@ -1,10 +1,13 @@
 {
+    "trainDataSetDir": "weizhi",
     "supportVideoName": [
         ".mp4",
-        ".avi",
+        ".avi"
     ],
     "supportPicName": [
         ".jpg",
-        ".png",
-    ]
+        ".png"
+    ],
+    "windowsWidth": 400,
+    "windowsHeight": 300
 }
