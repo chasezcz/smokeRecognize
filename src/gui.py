@@ -1,8 +1,10 @@
-import tkinter as tk
-from tkinter import messagebox
-from tkinter import filedialog
-from src.config import GLOBAL_CONFIG
 import logging
+import sys
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext
+
+from src.config import GLOBAL_CONFIG
+from src.svm import Svm
 
 PREDICT_MODEL = 0
 TRAIN_MODEL = 1
@@ -22,6 +24,7 @@ class Application(object):
         """
 
         logging.info("init Application")
+        self.svm = Svm()
         self.window = tk.Tk()
         self.window.title('烟雾识别系统')
         # set windows size
@@ -34,6 +37,7 @@ class Application(object):
         self.__create_predict_frame__()
         self.__create_train_frame__()
 
+        # set menu
         menubar = tk.Menu(self.window)
         self.window.config(menu=menubar)
 
@@ -51,7 +55,13 @@ class Application(object):
 
         menubar.add_cascade(label='关于', menu=about_me)
 
-        self.output = tk.Text(self.window)
+        # Redirect output to the GUI
+        # self.output = scrolledtext.ScrolledText(
+        #     self.window).pack(side=tk.BOTTOM)
+        # output_lb = tk.Label(self.window, text='实时日志').pack(side=tk.BOTTOM)
+        # redir = RedirectText(self.output)
+        # sys.stdout = redir
+        # sys.stderr = redir
 
         # default show train model
         self.__train_model__()
@@ -66,17 +76,6 @@ class Application(object):
         folder_dir = filedialog.askdirectory()
         logging.info("get folder dir : %s" % (folder_dir))
         self.target_dir.set(folder_dir)
-
-    def __start_train__(self):
-        pass
-
-    def __start_recg__(self):
-        """
-        __start_recg__ [summary]
-
-        [description]
-        """
-        pass
 
     def __create_train_frame__(self):
         self.train_frame = tk.Frame(self.window)
@@ -121,12 +120,14 @@ class Application(object):
             command=self.__start_recg__).pack(side=tk.RIGHT)
 
     def __train_model__(self):
+        logging.info("切换到训练模式")
         self.model = TRAIN_MODEL
         self.predict_frame.pack_forget()
         self.target_dir.set("尚未选择")
         self.train_frame.pack()
 
     def __predict_model__(self):
+        logging.info("切换到识别模式")
         self.model = PREDICT_MODEL
         self.train_frame.pack_forget()
         self.target_dir.set("尚未选择")
@@ -138,5 +139,31 @@ class Application(object):
             message='作者：张成泽\r\n'
             'github地址：https://github.com/woshichaoren000/smokeRecognize')
 
+    def __start_train__(self):
+        if len(self.target_dir.get()) < 6:
+            messagebox.showinfo(title='错误', message='请先选择数据集')
+
+        config_correct, self.model_dir = self.svm.train(self.target_dir.get())
+        if config_correct == False:
+            messagebox.showerror(title='错误', message='训练失败，请重新选择数据集，具体错误见日志文件')
+        else:
+            messagebox.showinfo(title='训练成功',
+                                message='训练成功, 模型地址为 %s' % self.model_dir)
+
+    def __start_recg__(self):
+        self.svm.predict(self.target_dir.get())
+
     def start(self):
         self.window.mainloop()
+
+
+class RedirectText(object):
+    def __init__(self, text_ctrl):
+        """Constructor"""
+        self.output = text_ctrl
+
+    def write(self, string):
+        self.output.insert(tk.END, string)
+
+    def flush(self):
+        pass
