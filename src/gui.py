@@ -1,4 +1,4 @@
-import logging
+import logging as log
 import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
@@ -23,7 +23,7 @@ class Application(object):
         in this function, it will create window and frame which the app need.
         """
 
-        logging.info("init Application")
+        log.info("init Application")
         self.svm = Svm()
         self.window = tk.Tk()
         self.window.title('烟雾识别系统')
@@ -68,13 +68,13 @@ class Application(object):
 
     def __get_file__(self):
         file_dir = filedialog.askopenfile()
-        logging.info("get file dir : %s" % (file_dir))
+        log.info("get file dir : %s" % (file_dir))
 
         self.target_dir.set(file_dir)
 
     def __get_folder__(self):
         folder_dir = filedialog.askdirectory()
-        logging.info("get folder dir : %s" % (folder_dir))
+        log.info("get folder dir : %s" % (folder_dir))
         self.target_dir.set(folder_dir)
 
     def __create_train_frame__(self):
@@ -120,14 +120,14 @@ class Application(object):
             command=self.__start_recg__).pack(side=tk.RIGHT)
 
     def __train_model__(self):
-        logging.info("切换到训练模式")
+        log.info("switch to train model")
         self.model = TRAIN_MODEL
         self.predict_frame.pack_forget()
         self.target_dir.set("尚未选择")
         self.train_frame.pack()
 
     def __predict_model__(self):
-        logging.info("切换到识别模式")
+        log.info("switch to predict model")
         self.model = PREDICT_MODEL
         self.train_frame.pack_forget()
         self.target_dir.set("尚未选择")
