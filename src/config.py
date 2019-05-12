@@ -1,6 +1,7 @@
 import demjson
+import logging as log
 
-CONFIG_FILE_DIR = './config/config.json'
+CONFIG_FILE_DIR = './data/config/config.json'
 
 
 class Config(object):
@@ -12,6 +13,25 @@ class Config(object):
         self.support_pics = self.config["supportPicName"]
         self.windows_width = self.config["windowsWidth"]
         self.windows_height = self.config["windowsHeight"]
+        self.output_width = self.config["outputWidth"]
+        self.output_height = self.config["outputHeight"]
+
+    def __get_format_by_dir__(self, dir):
+        paths = dir.split('.')
+        return paths[len(paths) - 1]
+
+    def is_support_pics(self, dir):
+        format_name = self.__get_format_by_dir__(dir)
+        log.debug('get format_name: %s' % format_name)
+        if format_name in self.support_pics:
+            return True
+        return False
+
+    def is_support_videos(self, dir):
+        format_name = self.__get_format_by_dir__(dir)
+        if format_name in self.support_videos:
+            return True
+        return False
 
 
 GLOBAL_CONFIG = Config()

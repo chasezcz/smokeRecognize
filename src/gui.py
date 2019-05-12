@@ -2,8 +2,13 @@ import logging as log
 import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
+import PIL
+
+from PIL import ImageTk
+import cv2 as cv
 
 from src.config import GLOBAL_CONFIG
+from src.img import Image as Img
 from src.svm import Svm
 
 PREDICT_MODEL = 0
@@ -52,7 +57,6 @@ class Application(object):
         about_me.add_command(label='关于我', command=self.__about_me__)
         about_me.add_separator()
         about_me.add_command(label='退出', command=self.window.quit)
-
         menubar.add_cascade(label='关于', menu=about_me)
 
         # Redirect output to the GUI
@@ -60,17 +64,37 @@ class Application(object):
         #     self.window).pack(side=tk.BOTTOM)
         # output_lb = tk.Label(self.window, text='实时日志').pack(side=tk.BOTTOM)
         # redir = RedirectText(self.output)
-        # sys.stdout = redir
         # sys.stderr = redir
 
         # default show train model
-        self.__train_model__()
+        self.__predict_model__()
 
     def __get_file__(self):
-        file_dir = filedialog.askopenfile()
-        log.info("get file dir : %s" % (file_dir))
+        file_dir = filedialog.askopenfilename()
 
+        log.info("get file dir : %s" % (file_dir))
+        if GLOBAL_CONFIG.is_support_pics(file_dir):
+            log.info('get pic')
+            self.__show_img__(file_dir)
+        elif GLOBAL_CONFIG.is_support_videos(file_dir):
+            log.info("get video")
+            self.__show_video__(file_dir)
+        else:
+            messagebox.showerror('error', '文件格式有误，仅支持jpg，png，mp4，avi')
+            return
         self.target_dir.set(file_dir)
+
+    def __show_img__(self, dir):
+        # TODO: preview image every select image
+        img = Img(dir, 'first').get_src()
+        # photo = ImageTk.PhotoImage(image=PIL.Image.fromarray(img))
+        # self.canvas.create_image(0, 0, image=photo, anchor=tk.NW)
+        # self.canvas.update()
+        pass
+
+    def __show_video__(self, dir):
+        # TODO: preview video every select video
+        pass
 
     def __get_folder__(self):
         folder_dir = filedialog.askdirectory()
@@ -113,11 +137,14 @@ class Application(object):
                              textvariable=self.target_dir).pack(side=tk.RIGHT)
         tip_frame.pack()
         self.file_button = tk.Button(
-            self.predict_frame, text='选择视频',
+            self.predict_frame, text='选择文件',
             command=self.__get_file__).pack(side=tk.LEFT)
         self.start_button = tk.Button(
             self.predict_frame, text="开始识别",
             command=self.__start_recg__).pack(side=tk.RIGHT)
+        # to show result
+        self.canvas = tk.Canvas(self.predict_frame, width=256, height=256)
+        self.canvas.pack()
 
     def __train_model__(self):
         log.info("switch to train model")
@@ -151,7 +178,11 @@ class Application(object):
                                 message='训练成功, 模型地址为 %s' % self.model_dir)
 
     def __start_recg__(self):
-        self.svm.predict(self.target_dir.get())
+
+        if GLOBAL_CONFIG.is_support_pics(self.target_dir.get()):
+            self.svm.preidct_pic(self.target_dir.get())
+        elif GLOBAL_CONFIG.is_support_videos(self.target_dir.get()):
+            self.svm.preidct_video(self.target_dir.get())
 
     def start(self):
         self.window.mainloop()
