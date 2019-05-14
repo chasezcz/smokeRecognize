@@ -2,14 +2,14 @@ import logging as log
 import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
-import PIL.Image, PIL.ImageTk
 
 import cv2 as cv
+import PIL.Image
+import PIL.ImageTk
 
 from src.config import GLOBAL_CONFIG
 from src.img import Image as Img
-from src.svm import Svm
-from src.svm import CANVAS_IMG, CANVAS_IMG_PHOTO
+from src.svm import CANVAS_IMG, CANVAS_IMG_PHOTO, Svm
 
 PREDICT_MODEL = 0
 TRAIN_MODEL = 1

@@ -1,5 +1,6 @@
-import demjson
 import logging as log
+
+import demjson
 
 CONFIG_FILE_DIR = './data/config/config.json'
 

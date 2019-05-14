@@ -1,10 +1,11 @@
 import logging as log
 
-# from skimage.feature import local_binary_pattern
-from .config import GLOBAL_CONFIG
 import cv2 as cv
 import numpy as np
 from skimage import feature
+
+# from skimage.feature import local_binary_pattern
+from .config import GLOBAL_CONFIG
 
 
 class Image(object):

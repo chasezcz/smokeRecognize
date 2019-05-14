@@ -3,12 +3,14 @@ import os
 
 import cv2 as cv
 import numpy as np
-from src.video import Video
-from src.img import Image
-from src.config import GLOBAL_CONFIG
-from sklearn.svm import LinearSVC
+import PIL.Image
+import PIL.ImageTk
 from sklearn.externals import joblib
-import PIL.Image, PIL.ImageTk
+from sklearn.svm import LinearSVC
+
+from src.config import GLOBAL_CONFIG
+from src.img import Image
+from src.video import Video
 
 CANVAS_IMG = None
 CANVAS_IMG_PHOTO = None

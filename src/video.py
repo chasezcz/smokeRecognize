@@ -1,6 +1,8 @@
-from src.config import GLOBAL_CONFIG
-import cv2 as cv
 import logging as log
+
+import cv2 as cv
+
+from src.config import GLOBAL_CONFIG
 from src.img import Image
 
 
