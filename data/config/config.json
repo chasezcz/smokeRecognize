@@ -1,5 +1,4 @@
 {
-    "trainDataSetDir": "weizhi",
     "supportVideoName": [
         "mp4",
         "avi"
@@ -10,6 +9,8 @@
     ],
     "windowsWidth": 400,
     "windowsHeight": 300,
-    "outputWidth": 300,
-    "outputHeight": 800
+    "hogWidth": 256,
+    "hogHeight": 256,
+    "slideStep": 32,
+    "frameInterval": 1
 }

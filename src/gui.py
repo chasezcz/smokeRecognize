@@ -2,14 +2,14 @@ import logging as log
 import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext
-import PIL
+import PIL.Image, PIL.ImageTk
 
-from PIL import ImageTk
 import cv2 as cv
 
 from src.config import GLOBAL_CONFIG
 from src.img import Image as Img
 from src.svm import Svm
+from src.svm import CANVAS_IMG, CANVAS_IMG_PHOTO
 
 PREDICT_MODEL = 0
 TRAIN_MODEL = 1
@@ -143,8 +143,11 @@ class Application(object):
             self.predict_frame, text="开始识别",
             command=self.__start_recg__).pack(side=tk.RIGHT)
         # to show result
-        self.canvas = tk.Canvas(self.predict_frame, width=256, height=256)
-        self.canvas.pack()
+        # CANVAS_IMG = PIL.Image.open('data/img/welcome.gif')
+        # CANVAS_IMG_PHOTO = PIL.ImageTk.PhotoImage(CANVAS_IMG)
+        # self.canvas = tk.Canvas(self.predict_frame, width=256, height=256)
+        # self.canvas.create_image(0, 0, image=CANVAS_IMG_PHOTO, anchor=tk.NW)
+        # self.canvas.pack(side=tk.BOTTOM)
 
     def __train_model__(self):
         log.info("switch to train model")
@@ -180,7 +183,9 @@ class Application(object):
     def __start_recg__(self):
 
         if GLOBAL_CONFIG.is_support_pics(self.target_dir.get()):
-            self.svm.preidct_pic(self.target_dir.get())
+            img = self.svm.preidct_pic(self.target_dir.get())
+            # self.canvas.create_image(0, 0, image=img, anchor=tk.NW)
+            # self.canvas.update()
         elif GLOBAL_CONFIG.is_support_videos(self.target_dir.get()):
             self.svm.preidct_video(self.target_dir.get())
 

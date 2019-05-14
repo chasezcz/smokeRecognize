@@ -13,8 +13,10 @@ class Config(object):
         self.support_pics = self.config["supportPicName"]
         self.windows_width = self.config["windowsWidth"]
         self.windows_height = self.config["windowsHeight"]
-        self.output_width = self.config["outputWidth"]
-        self.output_height = self.config["outputHeight"]
+        self.hog_width = self.config["hogWidth"]
+        self.hog_height = self.config["hogHeight"]
+        self.slide_step = self.config["slideStep"]
+        self.frame_interval = self.config["frameInterval"]
 
     def __get_format_by_dir__(self, dir):
         paths = dir.split('.')
