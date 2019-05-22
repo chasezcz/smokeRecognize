@@ -11,6 +11,8 @@
     "windowsHeight": 300,
     "hogWidth": 256,
     "hogHeight": 256,
-    "slideStep": 32,
-    "frameInterval": 1
+    "slideStep": 64,
+    "frameInterval": 1,
+    "svmMaxIter": 500,
+    "svmTol": 1e-6
 }

@@ -151,8 +151,8 @@ class Svm(object):
             "image load successful, positive image num %d, negative image num %d"
             % (len(positive_samples), len(negative_samples)))
 
-        log.debug("features.shape: %s, labels.shapes: %s" %
-                  (np.shape(features), np.shape(labels)))
+        # log.debug("features.shape: %s, labels.shapes: %s" %
+        #           (np.shape(features), np.shape(labels)))
 
         log.info('start train svm model')
         # set svm learning, try sklearn.svm
@@ -194,14 +194,14 @@ class Svm(object):
             label = self.ml.predict(feature)
             # log.info("features.shape: %s, labels.shapes: %s" %
             #          (np.shape(feature), np.shape(label)))
+            log.debug(label)
             if label[0] == 1:
                 detections.append(
                     (x, y, self.ml.decision_function(feature), px - x, py - y))
-                log.info('%d %d %d %d, have smoke' % (x, y, px, py))
+                log.debug('have smoke, %d %d %d %d' % (x, y, px, py))
             else:
-                log.info('%d %d %d %d, have no smoke' % (x, y, px, py))
-
-        detections = self.__nms__(detections, 3)
+                log.debug('no smoke, %d %d %d %d' % (x, y, px, py))
+        detections = self.__nms__(detections, 2)
 
         # Display the results after performing NMS
         for (x, y, _, w, h) in detections:
@@ -237,11 +237,15 @@ class Svm(object):
                     sub_img = frame.cut(x, y, x + w, y + h)
                     feature = [sub_img.get_features()]
                     label = self.ml.predict(feature)
-                    log.debug("features.shape: %s, labels.shapes: %s" %
-                              (np.shape(feature), np.shape(label)))
+                    # log.debug("features.shape: %s, labels.shapes: %s" %
+                    #           (np.shape(feature), np.shape(label)))
                     if label[0] == 1:
                         frame.draw_rectangle(x, y, x + w, y + h)
-                    log.info('%d %d %d %d, have smoke' % (x, y, x + w, y + h))
+                        log.debug('have smoke, %d %d %d %d' %
+                                  (x, y, x + w, y + h))
+                    else:
+                        log.debug('no smoke, %d %d %d %d' %
+                                  (x, y, x + w, y + h))
 
             frame.show()
             if cv.waitKey(1) == ord('q'):

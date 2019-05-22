@@ -40,7 +40,9 @@ class Image(object):
     def get_HOG(self):
         # get hog and save to self.descriptor
         # 1. resize image to get copy
+
         copy = self.resize(GLOBAL_CONFIG.hog_width, GLOBAL_CONFIG.hog_height)
+        # copy = self.image
         if copy is None:
             log.error('resize failed. get hog failed')
             return
@@ -59,6 +61,7 @@ class Image(object):
         numPoints = 24
         radius = 8
         eps = 1e-7
+        # copy = self.image
         copy = self.resize(GLOBAL_CONFIG.hog_width, GLOBAL_CONFIG.hog_height)
         gray = cv.cvtColor(copy, cv.COLOR_BGR2GRAY)
         lbp = feature.local_binary_pattern(gray,

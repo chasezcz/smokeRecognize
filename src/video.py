@@ -1,7 +1,7 @@
 import logging as log
 
 import cv2 as cv
-
+import time
 from src.config import GLOBAL_CONFIG
 from src.img import Image
 
@@ -32,3 +32,5 @@ class Video(object):
             if frame_index % GLOBAL_CONFIG.frame_interval == 0:
                 yield Image(frame)
             frame_index = frame_index + 1
+
+            # time.sleep(0.1)
